@@ -9,9 +9,10 @@ This folder contains all documentation for the NutriTrack PWA project.
 - [ARCHITECTURE.md](./ARCHITECTURE.md) - Current technical architecture
 - [DATA_MODEL.md](./DATA_MODEL.md) - Post-5.8 data model documentation
 - [DEVELOPMENT_PROCESS.md](./DEVELOPMENT_PROCESS.md) - Phase workflow and validation
+- [USER_GUIDE.md](./USER_GUIDE.md) - User-facing documentation
+- [FEATURES_AND_IMPROVEMENTS.md](./FEATURES_AND_IMPROVEMENTS.md) - Action items for discussion
 - [decisions/](./decisions/) - Architecture Decision Records (ADRs)
 - [phases/](./phases/) - Phase-specific documentation
-- [USER_GUIDE.md](./USER_GUIDE.md) - User-facing documentation
 
 ## Quick Links
 
