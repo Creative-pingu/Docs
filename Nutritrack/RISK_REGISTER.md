@@ -1,6 +1,6 @@
-# NutriTrack — Risk Register
+# NutriTrack - Risk Register
 
-> **Last Updated**: 2026-08-14
+> **Last Updated**: 2026-08-16
 > **Owner**: Architect Chat
 > **Status**: Active
 
@@ -13,6 +13,7 @@ This document tracks all identified risks for the NutriTrack project.
 **Risk Tolerance Summary**:
 - Acceptable: App may break occasionally (non-critical features)
 - NOT Acceptable: Data loss or corruption (ZERO TOLERANCE)
+- NOT Acceptable: Unauthorized data transmission (ZERO TOLERANCE)
 
 ---
 
@@ -25,6 +26,8 @@ This document tracks all identified risks for the NutriTrack project.
 | R1 | localStorage corruption | Data Integrity | Low | High | Storage health instrumentation, corrupted keys guard | Nick | Monitor |
 | R2 | iOS Safari quirks | Platform | Medium | Medium | Feature detection, fallback mechanisms | Dev Chat | Active |
 | R5 | Data loss on save-on-load | Data Integrity | Low | High | Corrupted keys guard | Review Chat | Monitor |
+| R11 | Hardcoded external API call (Anthropic) | Privacy/Security | High | High | Remove function or add explicit consent | Dev Chat | NEW - CRITICAL |
+| R12 | eval() usage in code execution | Security | High | High | Replace with safer alternative | Dev Chat | NEW - CRITICAL |
 
 ### High Priority (Reevaluation Required)
 
