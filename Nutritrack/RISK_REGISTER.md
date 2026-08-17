@@ -29,10 +29,7 @@ This document tracks all identified risks for the NutriTrack project.
 
 ### High Priority (Reevaluation Required)
 
-| ID | Risk | Category | Likelihood | Impact | Mitigation | Owner | Status |
-|----|------|----------|------------|--------|------------|-------|--------|
-| R7 | Offline detection reliability | Platform | Medium | High | Reevaluate current mechanism | Architect | Reevaluate |
-| R8 | Error handling UX | UX | Medium | Medium | Reevaluate for better messages | Dev | Reevaluate |
+_No risks currently in this tier._ R7 and R8 were resolved by Phase 8 (2026-08-17); see Resolved Risks below.
 
 ### Monitored Risks
 
@@ -50,6 +47,8 @@ This document tracks all identified risks for the NutriTrack project.
 |----|------|----------|------------|--------|------------|-------|--------|
 | R11 | Hardcoded external API call (Anthropic) | Privacy/Security | High | High | Removed function, replaced with local-only parsing (Phase 7a) | Dev Chat | **RESOLVED - 2026-08-16** |
 | R12 | eval() usage in code execution | Security | High | High | Pre-compiled JSX to JS, removed eval() (Phase 7b) | Dev Chat | **RESOLVED - 2026-08-17** |
+| R7 | Offline detection reliability | Platform | Medium | High | Hybrid navigator.onLine + Worker /health 1000ms probe + last-known cache (Phase 8) | Dev Chat | **RESOLVED - 2026-08-17** |
+| R8 | Error handling UX | UX | Medium | Medium | Centralized friendlyError() mapping + local-only nt-error-logs + recovery paths (Phase 8) | Dev Chat | **RESOLVED - 2026-08-17** |
 
 ---
 
@@ -71,6 +70,15 @@ This document tracks all identified risks for the NutriTrack project.
 - **Observation**: SHELL_APP_VERSION rename was necessary to avoid const collision between index.html and NutriTrack.js
 - **Observation**: Dynamic script injection pattern used (proven from earlier commits)
 - **Observation**: Babel CDN removed from runtime, but React/ReactDOM still loaded from CDN
+
+### Phase 8 (Platform Reliability — A1/A2/R7/R8)
+- **Offline detection (R7)**: Hybrid strategy — navigator.onLine fast gate + Worker /health probe with 1000ms timeout (down from 4000ms) + last-known state cached in localStorage (nt-last-online). A transient probe failure falls back to cached state rather than flipping to offline (flicker-free); a genuine outage is confirmed on the next 5s poll.
+- **502/503 semantics**: A Worker 502/503 (Notion upstream unreachable) is treated as a sync outage, not connectivity — isOnline stays true so the sync UI surfaces the error instead of mis-reporting the device as offline.
+- **Error UX (R8)**: Centralized mapError()/friendlyError() translate technical messages to short, actionable strings; every UI error path routes through it. Local-only nt-error-logs ring buffer (capped 50, never transmitted) with a read-only viewer in Settings > About.
+- **Observation**: The error-mapping smoke test caught an ordering bug — "foods.json fetch failed: 404" contains "fetch failed" and would have mis-classified a DB load failure as a network error. fooddb is now checked before network (more specific patterns first).
+- **Observation**: The offline banner's position:sticky (in a document.body portal) did not reliably pin on iOS; switched to position:fixed at top with an in-flow spacer of equal height to avoid header overlap.
+- **Observation**: "Clear logs" originally called setView("settings") while already on settings (a no-op); fixed with an errorLogsVersion re-render counter bumped on clear/inject.
+- **Debug tooling**: Added inject-test-error buttons in Developer > Debug tools (one per error type) so the friendly-message + log pipeline can be exercised entirely offline without the Notion buttons (which stay greyed out offline).
 
 ### New Considerations
 | ID | Risk | Category | Likelihood | Impact | Mitigation | Owner | Status |
