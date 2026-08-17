@@ -2,7 +2,7 @@
 
 > **Last Updated**: 2026-08-17
 > **Owner**: Architect Chat
-> **Status**: Phase 8 complete, Phase 9 moved to end
+> **Status**: Phase 8 complete, phases renumbered
 
 ---
 
@@ -26,44 +26,37 @@
 **Batches**: A1, A2, R7, R8
 **Features**: Improved offline detection, user-friendly errors
 
----
-
-### Phase 6o: Custom Food Manual Promotion
+### Phase 9: Custom Food Promotion and Deployment
 **Status**: Ready for Implementation
-**Batches**: A8
-**Features**: Custom food export with complete schema, null placeholders
+**Combines**: Phase 6o (Custom Food) + Phase 10 (Deployment)
+**Features**: Custom food export with complete schema, deployment improvements
 
-### Phase 10: Deployment and Infrastructure
-**Status**: Queued
-**Batches**: A4, A5, R4, R10
-**Features**: Deployment topology, versioning, GitHub Pages, SW updates
-
-### Phase 12: Recipe Management
+### Phase 10: Recipe Management
 **Status**: Queued
 **Features**: Editable recipe templates, update ingredients/quantities
 
-### Phase 13: Goal Tracking Enhancements
+### Phase 11: Goal Tracking Enhancements
 **Status**: Queued
 **Features**: Colour coding, info tooltips, WHO vs optimal nutrition
 
-### Phase 14: Quantity and Settings UX
+### Phase 12: Quantity and Settings UX
 **Status**: Queued
 **Features**: Standard servings, round numbers, settings cleanup
 
-### Phase 15: Database Architecture
+### Phase 13: Database Architecture
 **Status**: Queued
 **Features**: Regional databases, standardized product names
 
-### Phase 9: Storage and Performance
+### Phase 14: Storage and Performance
 **Status**: Queued (moved to end - monitor only unless issues arise)
 **Batches**: A3, R1, R5, R9
 **Features**: localStorage vs IndexedDB evaluation, storage health, performance monitoring
 
-### Phase 11: Testing and Future Features
+### Phase 15: Testing and Future Features
 **Status**: Queued
 **Batches**: A6, A7, A8
 **Features**: Automated testing, voice input, custom food subtypes
-**Note**: Non-essential, at end of roadmap
+**Note**: Non-essential
 
 ---
 
@@ -83,7 +76,7 @@
 
 | Phase | Status | Description |
 |-------|--------|-------------|
-| 6o | Ready | Custom Food Manual Promotion |
+| 9 | Ready | Custom Food Promotion and Deployment |
 
 ---
 
@@ -95,27 +88,26 @@ Phase 7a (CRITICAL) - COMPLETE
     
     Phase 8 (Platform Reliability) - COMPLETE
     
-    Phase 6o (Custom Food Manual Promotion) - READY
-    └── Phase 10 (Deployment and Infrastructure)
-        └── Phase 12 (Recipe Management)
-            └── Phase 13 (Goal Tracking)
-                └── Phase 14 (Quantity and Settings UX)
-                    └── Phase 15 (Database Architecture)
-                        └── Phase 9 (Storage and Performance)
-                            └── Phase 11 (Testing and Future Features)
+    Phase 9 (Custom Food + Deployment) - READY
+    └── Phase 10 (Recipe Management)
+        └── Phase 11 (Goal Tracking)
+            └── Phase 12 (Quantity and Settings UX)
+                └── Phase 13 (Database Architecture)
+                    └── Phase 14 (Storage and Performance)
+                        └── Phase 15 (Testing and Future Features)
 ```
 
 **Note**: Phase 7a, 7b, and 8 are complete.
-Phase 6o is ready for implementation.
-Phase 9 moved to end - will only address if storage issues arise.
+Phase 9 is ready for implementation (combines old Phase 6o and Phase 10).
+Phase 14 moved to end - will only address if storage issues arise.
 
 ---
 
 ## 🎯 RECOMMENDED NEXT STEPS
 
-1. **NOW**: Implement Phase 6o (Custom Food Manual Promotion)
-2. **After 6o**: Implement Phase 10 (Deployment and Infrastructure)
-3. **Then**: Phase 12 → 13 → 14 → 15 → 9 → 11
+1. **NOW**: Implement Phase 9 (Custom Food Promotion and Deployment)
+2. **After Phase 9**: Implement Phase 10 (Recipe Management)
+3. **Then**: Phase 11 → 12 → 13 → 14 → 15
 
 ---
 
@@ -125,7 +117,7 @@ Phase 9 moved to end - will only address if storage issues arise.
 - No new runtime dependencies without Architect approval
 - Privacy principles must be maintained in all implementations
 - Review Chat must verify all changes
-- Phase 9 is monitoring-only unless storage issues emerge
+- Phase 14 is monitoring-only unless storage issues emerge
 
 ## 🔗 References
 - [Project Charter](../PROJECT_CHARTER.md)
