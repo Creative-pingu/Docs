@@ -1,6 +1,6 @@
 # NutriTrack Development Roadmap
 
-> **Last Updated**: 2026-08-16
+> **Last Updated**: 2026-08-17
 > **Owner**: Architect Chat
 > **Status**: Phase 7a/7b ready for implementation
 
@@ -64,7 +64,61 @@
 
 ---
 
-### Phase 11: Future Features & Testing
+### Phase 12: Recipe Management
+**Batches**: New feature requests
+
+| Task | Description | Priority |
+|------|-------------|----------|
+| Recipe Templates | Recipes editable when logged (remove unused ingredients) | High |
+| Edit Recipes | Update ingredients and quantities | High |
+
+**ETC**: 4-6 hours
+**Depends on**: Phase 10 completion
+
+---
+
+### Phase 13: Goal Tracking Enhancements
+**Batches**: New feature requests
+
+| Task | Description | Priority |
+|------|-------------|----------|
+| Colour Coding | Visual indicators when exceeding daily intake | High |
+| Info Tooltips | Explain why exceeding limits is harmful | High |
+| Nutrition Options | Recommended (WHO base) and Optimal (personalized) | Medium |
+
+**ETC**: 3-5 hours
+**Depends on**: Phase 12 completion
+
+---
+
+### Phase 14: Quantity & Settings UX
+**Batches**: New feature requests
+
+| Task | Description | Priority |
+|------|-------------|----------|
+| Standard Servings | Quantity options include cloves, tsp, etc. | Medium |
+| Round Numbers | Display 14.333333g as 14.3g or 14g | Medium |
+| Settings Cleanup | Remove name field, add info tooltips | Low |
+
+**ETC**: 2-4 hours
+**Depends on**: Phase 13 completion
+
+---
+
+### Phase 15: Database Architecture
+**Batches**: New feature requests
+
+| Task | Description | Priority |
+|------|-------------|----------|
+| Regional Databases | Base DB + downloadable regional food databases | Medium |
+| Standardized Products | Group alternate names (tipo 0 flour = plain flour) | Low |
+
+**ETC**: 5-8 hours
+**Depends on**: Phase 14 completion
+
+---
+
+### Phase 11: Testing & Future Features
 **Batches**: A6, A7, A8
 
 | Task | ID | Description | Priority |
@@ -74,7 +128,7 @@
 | Custom Food Subtypes | A8 | Null placeholders (DECIDED) | Low |
 
 **ETC**: 5-8 hours
-**Depends on**: Phase 10 completion
+**Depends on**: Phase 15 completion
 
 ---
 
@@ -107,12 +161,15 @@ Phase 7a (CRITICAL)
     Phase 8 (Platform Reliability)
     └── Phase 9 (Storage & Performance)
         └── Phase 10 (Deployment & Infra)
-            └── Phase 11 (Future Features)
+            └── Phase 12 (Recipe Management)
+                └── Phase 13 (Goal Tracking)
+                    └── Phase 14 (Quantity & Settings UX)
+                        └── Phase 15 (Database Architecture)
+                            └── Phase 11 (Testing & Future Features)
 ```
 
-**Parallel Execution Possible**:
-- Phase 6o and 6p can run in parallel with Phase 8+
-- Phase 6o and 6p can run in parallel with each other
+**Note**: Phase 11 moved to end as non-essential.
+Phase 6o and 6p can run in parallel after Phase 7 completes.
 
 ---
 
@@ -121,7 +178,7 @@ Phase 7a (CRITICAL)
 1. **IMMEDIATE**: Implement Phase 7a and 7b (Security Hardening)
 2. **After Phase 7**: Implement Phase 8 (Platform Reliability)
 3. **Parallel**: Start Phase 6o and 6p after Phase 7 completes
-4. **Sequential**: Phase 9 → 10 → 11
+4. **Sequential**: Phase 9 → 10 → 12 → 13 → 14 → 15 → 11
 
 ---
 
