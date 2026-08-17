@@ -11,7 +11,7 @@ This folder contains briefs and documentation for each phase of NutriTrack devel
 | **7a** | Complete | Remove Anthropic API Call | CRITICAL |
 | **7b** | Complete | Remove eval() Usage | CRITICAL |
 | **8** | Complete | Platform Reliability | High |
-| **9** | Ready | Custom Food Promotion and Deployment | Medium |
+| **9** | Complete | Custom Food Promotion and Deployment | Medium |
 | **10** | Queued | Recipe Management | High |
 | **11** | Queued | Goal Tracking Enhancements | High |
 | **12** | Queued | Quantity and Settings UX | Medium |
@@ -22,10 +22,10 @@ This folder contains briefs and documentation for each phase of NutriTrack devel
 ## Phase Details
 
 ### Phase 9: Custom Food Promotion and Deployment
-**Status**: Ready for Implementation
+**Status**: Complete
 **Brief**: [phase-9/README.md](./phase-9/README.md)
 **Combines**: Old Phase 6o + Old Phase 10
-**Features**: Custom food export with complete schema, deployment improvements
+**Features**: Custom food export with complete schema (33 fields), edit + simple/advanced form, settings entry, SW update-failure handling, v67
 
 ## References
 - [Project Charter](../PROJECT_CHARTER.md)
