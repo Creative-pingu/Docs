@@ -12,8 +12,6 @@ phases/
 │   └── README.md
 ├── phase-6o/
 │   └── README.md
-├── phase-6p/
-│   └── README.md
 ├── phase-7a/
 │   └── README.md
 ├── phase-7b/
@@ -45,7 +43,6 @@ phases/
 | **7b** | Complete | Remove eval() Usage | CRITICAL | - |
 | **8** | Ready | Platform Reliability | High | 7a, 7b |
 | **6o** | Ready | Custom Food Manual Promotion | Medium | 6m |
-| **6p** | Ready | Offline Detection and Error UX | Medium | 6m |
 | **9** | Queued | Storage and Performance | Medium | 8 |
 | **10** | Queued | Deployment and Infrastructure | Medium | 9 |
 | **11** | Queued | Testing and Future Features | Low | 15 |
@@ -63,7 +60,6 @@ phases/
 **After Phase 7 Complete:**
 - Phase 8: Platform Reliability (A1, A2, R7, R8) - READY
 - Phase 6o: Custom Food Manual Promotion - READY
-- Phase 6p: Offline Detection and Error UX - READY
 
 ## Phase Details
 
@@ -97,12 +93,6 @@ phases/
 **Status**: Ready for Implementation
 **Brief**: [phase-6o/README.md](./phase-6o/README.md)
 **Decision**: A8 resolved - Use null placeholders for missing subtype fields
-
-### Phase 6p: Offline Detection and Error UX
-**Status**: Ready for Implementation
-**Brief**: [phase-6p/README.md](./phase-6p/README.md)
-**Combines**: A1 (Offline Detection) + A2 (Error Handling UX)
-**Note**: May be superseded by Phase 8
 
 ### Phase 9: Storage and Performance
 **Status**: Queued
@@ -144,7 +134,6 @@ Phase 7a (CRITICAL) - COMPLETE
     
     Phase 8 (Platform Reliability) - READY
     ├── Phase 6o (Custom Food Manual Promotion) - READY
-    ├── Phase 6p (Offline Detection and Error UX) - READY
     │   
     └── Phase 9 (Storage and Performance)
         └── Phase 10 (Deployment and Infrastructure)
@@ -156,8 +145,8 @@ Phase 7a (CRITICAL) - COMPLETE
 ```
 
 **Note**: Phase 7a and 7b are complete.
-Phase 8, 6o, and 6p can run in parallel as they touch different feature areas.
-Phase 6p may be superseded by Phase 8 (Platform Reliability covers similar ground).
+Phase 8 and 6o can run in parallel as they touch different feature areas.
+Phase 6p has been removed (superseded by Phase 8).
 
 ## References
 - [Project Charter](../PROJECT_CHARTER.md)
