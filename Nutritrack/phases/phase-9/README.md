@@ -70,6 +70,19 @@ Current deployment uses GitHub Pages with basic versioning. Need to review and i
 - Migration: One-time conversion for existing custom foods
 - Deployment: GitHub Pages (current, open to reconsideration)
 
+## Follow-up (deferred to a later phase)
+
+### Custom-food export → direct merge into foods.json
+
+Phase 9 ships custom-food export as a **downloadable JSON patch** (RFC 6902 `add` ops, foods.json schema v1) that a maintainer appends to the `foods` array by hand. The patch is merge-ready, but it is **not** wired to write directly into the deployed `foods.json` (the PWA has no write path to the repo, and direct in-place merges would risk corrupting the canonical DB).
+
+**Deferred work — picked up in a future phase:**
+- Split the monolithic `foods.json` into **separate per-category / per-region files** (see Phase 13 — Database Architecture) so promoted custom foods can merge into a smaller, scoped file.
+- Provide a merge tooling path (likely a build-time script in the repo, not a runtime PWA write) that consumes the exported patch and writes the merged files, with validation against schema v1.
+- Surface a one-tap "promote" action in the app once the merge tooling is available (the export button + patch format landed in Phase 9 are the foundation for this).
+
+No code change is required for Phase 9 sign-off; the exported patch already merges cleanly (verified against the real 830-food foods.json).
+
 ## Validation Matrix
 | Test | Action | Expected Result |
 |------|--------|-----------------|
