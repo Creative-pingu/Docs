@@ -1,6 +1,6 @@
 # Phase 8 - Platform Reliability
 
-> **Status**: Ready for Implementation
+> **Status**: ✅ Complete — deployed to `main` at v65 (2026-08-17). See [PHASE-REPORT-8.md](./PHASE-REPORT-8.md).
 > **Owner**: Dev Chat
 > **Architect**: Architect Chat
 > **Combines**: A1, A2, R7, R8

@@ -109,8 +109,8 @@ These items still require architectural decisions or reevaluation.
 
 | ID | Item | Current State | Owner | Notes |
 |----|------|---------------|-------|-------|
-| A1 | Offline Detection Mechanism | Worker health endpoint | Architect | Current approach: probes Worker /health endpoint with 4000ms timeout. navigator.onLine unreliable on iOS standalone mode. |
-| A2 | Error Handling UX | In-app indicators | Dev | Current: technical error messages. Need more user-friendly messages and recovery paths. |
+| A1 | Offline Detection Mechanism | **RESOLVED (Phase 8, 2026-08-17)** | Architect | Hybrid: navigator.onLine fast gate + Worker /health 1000ms probe + last-known cache. See [phase-8/PHASE-REPORT-8.md](phases/phase-8/PHASE-REPORT-8.md). |
+| A2 | Error Handling UX | **RESOLVED (Phase 8, 2026-08-17)** | Dev | Centralized friendlyError() mapping + local-only nt-error-logs + recovery paths + inject-test-error debug controls. See [phase-8/PHASE-REPORT-8.md](phases/phase-8/PHASE-REPORT-8.md). |
 
 ### Medium Priority
 

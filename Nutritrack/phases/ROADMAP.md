@@ -22,15 +22,15 @@
 ## 🎯 POST-SECURITY ROADMAP
 
 ### Phase 8: Platform Reliability
+**Status**: ✅ Complete (2026-08-17) — deployed to `main` at v65. Report: [phase-8/PHASE-REPORT-8.md](phase-8/PHASE-REPORT-8.md).
 **Batches**: A1, A2, R7, R8
 
-| Task | ID | Description | Priority |
-|------|----|-------------|----------|
-| Offline Detection | A1/R7 | Improve offline/online state detection | High |
-| Error Handling UX | A2/R8 | User-friendly error messages with recovery paths | High |
-| User Toggle | - | Explicit offline mode switch | High |
+| Task | ID | Description | Priority | Status |
+|------|----|-------------|----------|--------|
+| Offline Detection | A1/R7 | Improve offline/online state detection | High | ✅ Hybrid navigator.onLine + Worker /health 1000ms probe + cache |
+| Error Handling UX | A2/R8 | User-friendly error messages with recovery paths | High | ✅ Centralized friendlyError() + nt-error-logs + inject-test-error |
 
-**ETC**: 3-5 hours
+**ETC**: 3-5 hours (actual: ~3h across 4 commits)
 **Depends on**: Phase 7 completion
 
 ---
