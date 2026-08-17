@@ -25,7 +25,7 @@ phases/
 |-------|--------|-------------|----------|------------|
 | **6m** | Complete | SW Update Banner Fix | - | - |
 | **6n** | Complete | Multi-Select Food Logging | - | 6m |
-| **7a** | Ready | Remove Anthropic API Call | CRITICAL | - |
+| **7a** | Complete | Remove Anthropic API Call | CRITICAL | - |
 | **7b** | Ready | Remove eval() Usage | CRITICAL | - |
 | **6o** | Ready | Custom Food Manual Promotion | Medium | 6m |
 | **6p** | Ready | Offline Detection and Error UX | Medium | 6m |
@@ -53,7 +53,7 @@ phases/
 **Features**: One meal picker, per-food quantity entry, explicit toggle
 
 ### Phase 7a: Remove Anthropic API Call (CRITICAL)
-**Status**: Ready for Implementation
+**Status**: Complete (deployed to main, v60) — see [COMPLETION-REPORT.md](./phase-7a/COMPLETION-REPORT.md)
 **Brief**: [phase-7a/README.md](./phase-7a/README.md)
 **Issue**: S1/R11 - Privacy violation
 **Blocks**: All other phases until resolved
