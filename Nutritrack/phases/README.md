@@ -15,7 +15,8 @@ phases/
 ├── phase-7a/
 │   └── README.md
 ├── phase-7b/
-│   └── README.md
+│   ├── README.md
+│   └── PHASE-REPORT-7b.md
 ├── phase-8/
 │   └── README.md
 ├── phase-9/
@@ -74,14 +75,17 @@ phases/
 **Features**: One meal picker, per-food quantity entry, explicit toggle
 
 ### Phase 7a: Remove Anthropic API Call (CRITICAL)
-**Status**: Complete
+**Status**: Complete (deployed v60)
 **Brief**: [phase-7a/README.md](./phase-7a/README.md)
 **Issue**: S1/R11 - Privacy violation resolved
+**Result**: Direct Anthropic API call replaced with local-only recipe text splitter; no user data transmitted externally.
 
 ### Phase 7b: Remove eval() Usage (CRITICAL)
-**Status**: Complete
+**Status**: Complete (deployed v61)
 **Brief**: [phase-7b/README.md](./phase-7b/README.md)
+**Report**: [phase-7b/PHASE-REPORT-7b.md](./phase-7b/PHASE-REPORT-7b.md)
 **Issue**: S2/R12 - XSS vulnerability resolved
+**Result**: Runtime fetch+eval() of Babel-transformed JSX replaced with a build-time-compiled static `NutriTrack.js` loaded via `<script>`. Babel CDN dropped from runtime; zero `eval()` calls remain.
 
 ### Phase 8: Platform Reliability
 **Status**: Ready for Implementation
