@@ -65,7 +65,7 @@ This document tracks all identified risks for the NutriTrack project.
 - Fallback: Treats entire paste as one recipe if no structure detected
 - Observation: Default servings is 4 if not specified
 
-### Phase 7b (Remove eval() Usage)  
+### Phase 7b (Remove eval() Usage)
 - Implementation: Pre-compiled NutriTrack.jsx to NutriTrack.js at build time
 - Build: Uses Babel with preset-react (classic runtime) + preset-env (modules:false)
 - Loading: Static script tag injection, no dynamic evaluation
