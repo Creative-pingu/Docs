@@ -3,45 +3,59 @@
 > **Last Updated**: 2026-08-17
 > **Purpose**: Action items and bug tracking for discussion with Architect Chat
 > **Owner**: Nick
-> **Status**: Review steps, privacy focus, and decision-making process order IMPLEMENTED. CRITICAL BUGS IDENTIFIED - BLOCKING.
+> **Status**: Review steps, privacy focus, and decision-making process order IMPLEMENTED. CRITICAL BUGS S1 & S2 RESOLVED. Phase 10 feedback incorporated.
 
 ---
 
-## 🚨 CRITICAL SECURITY BUGS (IMMEDIATE ACTION REQUIRED)
+## ✅ RESOLVED CRITICAL SECURITY BUGS
 
-These are blocking issues that violate core privacy principles and must be fixed before any further development.
+### S1: Hardcoded External API Call (PRIVACY VIOLATION) - RESOLVED
+**ID**: S1
+**Severity**: CRITICAL
+**Status**: RESOLVED - Fixed by Phase 7a
+**File**: NutriTrack.jsx
+**Function**: parseRecipesFromPasteText()
 
-### S1: Hardcoded External API Call (PRIVACY VIOLATION)
-ID: S1
-Severity: CRITICAL
-Status: COMPLETE
-File: NutriTrack.jsx
-Function: parseRecipesFromPasteText()
+**Issue**: Made direct POST requests to Anthropic API with user pasted recipe text, transmitting user data externally without explicit consent.
 
-Issue: Made direct POST requests to Anthropic API with user pasted recipe text, transmitting user data externally without explicit consent.
+**Violations**:
+- PROJECT_CHARTER: No user data collected or transmitted without explicit action
+- PROJECT_CHARTER: Local-Only Data Storage
+- PROJECT_CHARTER: Privacy by Design
 
-Fix: Function removed, replaced with local-only parsing.
+**Resolution**:
+- Removed all references to api.anthropic.com and claude-sonnet
+- Replaced with local-only recipe text splitter
+- Splits pasted text on markdown headings (#/##/###) or colon-terminated titles
+- Uses existing on-device regex parser (parseIngredients)
+- No network requests made; works fully offline
 
-Owner: Dev Chat -> Architect Chat
-Blocks: All phases until resolved
-ETC: 1-2 hours
+**Implementation**: Phase 7a
+**Verified**: No anthropic.com references in codebase
+**Owner**: Dev Chat
+**ETC**: 1-2 hours
 
 ---
 
-### S2: eval() Usage (XSS VULNERABILITY)
-ID: S2
-Severity: CRITICAL
-Status: COMPLETE
-File: index.html
-Function: loadApp()
+### S2: eval() Usage (XSS VULNERABILITY) - RESOLVED
+**ID**: S2
+**Severity**: CRITICAL
+**Status**: RESOLVED - Fixed by Phase 7b
+**File**: index.html
+**Function**: loadApp()
 
-Issue: Used eval to execute Babel-transformed code fetched from network. Creates remote code execution vulnerability.
+**Issue**: Used eval() to execute Babel-transformed code fetched from network. Created remote code execution vulnerability.
 
-Fix: Pre-compiled JSX to JS during build/deploy.
+**Resolution**:
+- Removed entire fetch+Babel transform+eval pipeline
+- Pre-compiled NutriTrack.jsx to NutriTrack.js at build time
+- Load NutriTrack.js via static script tag
+- Removed Babel CDN dependency from runtime
 
-Owner: Dev Chat -> Architect Chat
-Blocks: All phases until resolved
-ETC: 2-4 hours
+**Implementation**: Phase 7b
+**Verified**: No eval() calls in codebase
+**Owner**: Dev Chat
+**ETC**: 2-4 hours
 
 ---
 
@@ -83,76 +97,82 @@ Updated in:
 
 ---
 
-## 📋 ACTION ITEMS FOR ARCHITECT DISCUSSION
+## 🔴 Action Items for Architect Discussion
+
+These items still require architectural decisions or reevaluation.
 
 ### High Priority (Reevaluation Required)
 
 | ID | Item | Current State | Owner | Notes | Phase |
 |----|------|---------------|-------|-------|-------|
-| A1 | Offline Detection Mechanism | Worker health endpoint | Architect | navigator.onLine unreliable on iOS | Phase 8 |
-| A2 | Error Handling UX | In-app indicators | Dev | Need user-friendly messages | Phase 8 |
-| A3 | localStorage vs IndexedDB | localStorage (5MB cap) | Architect | Monitor for issues | Phase 14 |
-| A4 | Deployment Topology | GitHub Pages | Architect | Open to reconsideration | Phase 9 |
-| A5 | Versioning Strategy | CACHE_VERSION in sw.js | Architect | Improve if better semantic versioning | Phase 9 |
+| A1 | Offline Detection Mechanism | Worker health endpoint | Architect | navigator.onLine unreliable on iOS standalone mode | Phase 8 |
+| A2 | Error Handling UX | In-app indicators | Dev | Need user-friendly messages and recovery paths | Phase 8 |
 
 ### Medium Priority
 
 | ID | Item | Current State | Owner | Notes | Phase |
 |----|------|---------------|-------|-------|-------|
-| A6 | Automated Testing | Manual device testing | Dev | Future consideration | Phase 15 |
-| A7 | Voice Input | Deferred | Nick | Needs Anthropic account decision | Phase 15 |
+| A3 | localStorage vs IndexedDB | localStorage (5MB cap) | Architect | Monitor for issues. Migration path defined if needed. | Phase 14 |
+| A4 | Deployment Topology | GitHub Pages | Architect | Open to reconsideration if better options exist. | Phase 9 |
+| A5 | Versioning Strategy | CACHE_VERSION in sw.js | Architect | Improve if better semantic versioning needed. | Phase 9 |
+
+### Low Priority / Future Considerations
+
+| ID | Item | Current State | Owner | Notes | Phase |
+|----|------|---------------|-------|-------|-------|
+| A6 | Automated Testing | Manual device testing | Dev | Future consideration as codebase grows. | Phase 15 |
+| A7 | Voice Input | Deferred | Nick | Needs Anthropic account decision. | Phase 15 |
 | A8 | Custom Food Subtype Fields | Null placeholders decided | Nick | Implemented in Phase 9 | Phase 9 |
 
 ---
 
-## 🆕 NEW FEATURE IDEAS (Not Yet Prioritized)
+## 📋 Phase 10 Feedback - New Requirements
 
-### Nutrition Tracking Enhancements
+### New Feature Ideas
+
 | ID | Idea | Priority | Phase |
 |----|------|----------|-------|
+| F1 | Recipes act as templates editable when logged (remove unused ingredients) | High | Phase 11 |
+| F2 | Edit recipes: update ingredients (quantities, etc.) | High | Phase 11 |
 | F3 | Colour coding when exceeding recommended daily intake | High | Phase 11 |
 | F4 | Info button explaining why exceeding limits is harmful | High | Phase 11 |
 | F5 | Nutrition options: Recommended (WHO base levels) | Medium | Phase 11 |
 | F6 | Nutrition options: Optimal (personalized by activity level) | Medium | Phase 11 |
-| F13 | Track water consumption | High | Phase 11 |
-| F14 | Traffic light system for healthy/not healthy nutrients | High | Phase 11 |
-| F22 | Alcohol tracking with adjustable percentages | Medium | Phase 11 |
-
-### Recipe and UX Improvements
-| ID | Idea | Priority | Phase |
-|----|------|----------|-------|
-| F1 | Recipes act as templates editable when logged | High | Phase 12 |
-| F2 | Edit recipes: update ingredients (quantities, etc.) | High | Phase 12 |
 | F7 | Quantity options include standard servings (cloves, tsp, etc.) | Medium | Phase 12 |
 | F8 | Round numbers (14.333333g -> 14.3g or 14g) | Medium | Phase 12 |
 | F9 | Settings: Remove name field (individual user) | Low | Phase 12 |
 | F10 | Settings: Explain why inputs are needed (info icons) | Low | Phase 12 |
-| F15 | After selecting food, options should reset | High | Phase 12 |
-| F16 | Multi-select with checkboxes directly on items | High | Phase 12 |
-| F17 | Bigger button to change dates | Medium | Phase 12 |
-| F18 | Fix page zoom/centering glitch | Medium | Phase 12 |
-| F19 | Fix back navigation in recipe ingredient selection | Medium | Phase 12 |
-| F20 | Remove source from recipe tab | Low | Phase 12 |
-| F21 | Fix scroll to bottom going too far | Medium | Phase 12 |
-
-### Database Architecture
-| ID | Idea | Priority | Phase |
-|----|------|----------|-------|
 | F11 | One base database + downloadable regional food databases | Medium | Phase 13 |
 | F12 | Standardized products grouped with alternate names | Low | Phase 13 |
+| F13 | Track water consumption | High | Phase 11 |
+| F14 | Alcohol tracking with drink categories | High | Phase 11 |
+| F15 | Adjustable ABV percentage per drink category (e.g., beer default 5%, editable) | High | Phase 11 |
+| F16 | Traffic light system for nutrient display (green/yellow/red) | High | Phase 11 |
+
+### Bug Fixes & UX Polish
+
+| ID | Issue | Priority | Phase |
+|----|-------|----------|-------|
+| B1 | After selecting a food, options should reset (currently last text saved) | High | Phase 11 |
+| B2 | Page often seems zoomed/not centred and feels glitchy | High | Phase 11 |
+| B3 | When adding ingredient to recipe, back button goes to recipe screen instead of ingredients list | Medium | Phase 11 |
+| B4 | Scroll to bottom of log and recipes pages goes too far - staring at blank screen | Medium | Phase 11 |
+| B5 | Multi-select with checkboxes per item (instead of toggle mode) | Medium | Phase 11 |
+| B6 | Bigger button to change dates | Medium | Phase 12 |
+| B7 | Remove source field from recipe tab | Low | Phase 11 |
 
 ---
 
-## 📝 IMPLEMENTATION NOTES
+## 📝 Implementation Notes
 
 ### For Architect Chat
-- Please review action items above (A1-A8)
+- Review action items above (A1-A8)
 - Provide recommendations for A1 and A2
 - Update this document with decisions
 
 ### For Nick
-- Review and prioritize new feature ideas (F1-F22)
-- Make decisions on feature priority
+- Review and prioritize new feature ideas (F1-F16)
+- Review and prioritize bug fixes (B1-B7)
 - Note: Review process, privacy focus, and decision-making process order are now implemented
 
 ---
@@ -161,12 +181,12 @@ Updated in:
 - [x] Review process documentation updated (no architect work review)
 - [x] Core privacy focus added (local-only storage, no data collection)
 - [x] Decision-making process order fixed (Review now after Dev steps)
-- [x] All documentation uploaded to Docs/Nutritrack/
 - [x] Phase 7a: Remove Anthropic API Call
 - [x] Phase 7b: Remove eval() Usage
 - [x] Phase 8: Platform Reliability
 - [x] Phase 9: Custom Food Promotion and Deployment
 - [x] Phase 10: Recipe Management
+- [x] All documentation uploaded to Docs/Nutritrack/
 
 ---
 
@@ -176,5 +196,3 @@ Updated in:
 - [Risk Register](./RISK_REGISTER.md)
 - [Architecture Documentation](./ARCHITECTURE.md)
 - [Development Process](./DEVELOPMENT_PROCESS.md)
-- [Dev Plan v6](../../uploads/Dev%20Plan%20v6.md)
-- [Current Status](../../uploads/Current%20Status%202026-05-28.md)
