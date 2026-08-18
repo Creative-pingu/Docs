@@ -1,6 +1,6 @@
 # NutriTrack — Data Model (Post-5.8)
 
-> **Last Updated**: 2026-08-14
+> **Last Updated**: 2026-08-18
 > **Status**: Current
 
 ---
@@ -61,3 +61,9 @@ const STORAGE_KEYS = [
 - **Supplement Deviation**: Aggregate as-consumed totals, not per-100g
 - **Read Path**: Snapshot-preferred, fallback to live foodId for pre-5.8
 - **Edit Path**: Does NOT refresh snapshot (historical entries remain historical)
+## Phase 11: Water & Alcohol Integration
+- **New Fields**: `water` (g/100g), `alcohol` (g/100g) added to every FoodItem
+- **Alcohol**: Treated as a first-class macro; calories computed as `alcohol_g × 7` and added to daily total. Drink records have alcohol values set and their `calories` field reduced to food-only.
+- **Water**: Currently **`null` (unknown)** for all foods except the explicit "Water" entry. Water content values need to be verified and populated in a future stage. The app treats `null` as 0 in totals/export.
+- **UI**: Alcohol appears in the macro ring grid; Water has a dedicated meter (ring + goal) in the log view.
+- **Export**: Includes `alcohol_g` and `water_ml` columns.
