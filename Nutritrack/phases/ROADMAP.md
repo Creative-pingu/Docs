@@ -1,8 +1,8 @@
 # NutriTrack Development Roadmap
 
-> **Last Updated**: 2026-08-17
+> **Last Updated**: 2026-08-18
 > **Owner**: Architect Chat
-> **Status**: Phase 10 complete, feedback incorporated
+> **Status**: Phase 10 complete, Phase 11 ready with sub-parts
 
 ---
 
@@ -28,44 +28,28 @@
 
 ### Phase 9: Custom Food Promotion and Deployment
 **Status**: Complete
-**Combines**: Phase 6o (Custom Food) + Phase 10 (Deployment)
+**Combines**: Old Phase 6o + Old Phase 10
 **Features**: Custom food export with complete schema, deployment improvements
 
 ### Phase 10: Recipe Management
 **Status**: Complete
 **Features**: Editable recipe templates, update ingredients/quantities
 
-### Phase 11: Nutrition Tracking Enhancements
+### Phase 11: Enhanced Tracking and UX Polish
 **Status**: Ready for Implementation
-**Features**: F3, F4, F5, F6, F13, F14, F22
-- Colour coding when exceeding daily intake
-- Info button explaining why exceeding limits is harmful
-- Nutrition options: Recommended (WHO base) and Optimal (personalized)
-- Track water consumption
-- Traffic light system for healthy/not healthy nutrients
-- Alcohol tracking with adjustable percentages
+**Structure**: Three sub-parts
+- **11a**: Water and Alcohol Tracking (HIGHEST PRIORITY)
+- **11b**: Goal Tracking Enhancements
+- **11c**: Bug Fixes and UX Polish
+**ETC**: 8-12 hours
 
-### Phase 12: Recipe and UX Improvements
+### Phase 12: Quantity and Settings UX
 **Status**: Queued
-**Features**: F1, F2, F7, F8, F9, F10, F15, F16, F17, F18, F19, F20, F21
-- Recipes as editable templates
-- Edit recipes: update ingredients/quantities
-- Standard servings in quantity options
-- Round numbers display
-- Settings cleanup
-- After selecting food, options should reset
-- Multi-select with checkboxes directly on items
-- Bigger date change button
-- Fix page zoom/centering glitch
-- Fix back navigation in recipe ingredient selection
-- Remove source from recipe tab
-- Fix scroll to bottom going too far
+**Features**: Standard servings, round numbers, settings cleanup
 
 ### Phase 13: Database Architecture
 **Status**: Queued
-**Features**: F11, F12
-- One base database + downloadable regional food databases
-- Standardized products grouped with alternate names
+**Features**: Regional databases, standardized product names
 
 ### Phase 14: Storage and Performance
 **Status**: Queued (monitor only unless issues arise)
@@ -98,7 +82,7 @@
 
 | Phase | Status | Description |
 |-------|--------|-------------|
-| 11 | Ready | Nutrition Tracking Enhancements |
+| 11 | Ready | Enhanced Tracking and UX Polish (11a, 11b, 11c) |
 
 ---
 
@@ -114,23 +98,30 @@ Phase 7a (CRITICAL) - COMPLETE
     
     Phase 10 (Recipe Management) - COMPLETE
     
-    Phase 11 (Nutrition Tracking) - READY
-    └── Phase 12 (Recipe and UX Improvements)
+    Phase 11 (Enhanced Tracking + UX Polish) - READY
+    │   ├── 11a: Water and Alcohol Tracking
+    │   ├── 11b: Goal Tracking Enhancements
+    │   └── 11c: Bug Fixes and UX Polish
+    │
+    └── Phase 12 (Quantity and Settings UX)
         └── Phase 13 (Database Architecture)
             └── Phase 14 (Storage and Performance)
                 └── Phase 15 (Testing and Future Features)
 ```
 
 **Note**: Phase 7a, 7b, 8, 9, and 10 are complete.
-Phase 11 is ready for implementation.
+Phase 11 is ready for implementation with three sub-parts.
 Phase 14 moved to end - will only address if storage issues arise.
 
 ---
 
 ## 🎯 RECOMMENDED NEXT STEPS
 
-1. **NOW**: Implement Phase 11 (Nutrition Tracking Enhancements)
-2. **After Phase 11**: Implement Phase 12 (Recipe and UX Improvements)
+1. **NOW**: Implement Phase 11 (Enhanced Tracking and UX Polish)
+   - Start with 11a (Water and Alcohol Tracking - highest priority)
+   - Then 11b (Goal Tracking Enhancements)
+   - Finally 11c (Bug Fixes and UX Polish)
+2. **After Phase 11**: Implement Phase 12 (Quantity and Settings UX)
 3. **Then**: Phase 13 → 14 → 15
 
 ---
