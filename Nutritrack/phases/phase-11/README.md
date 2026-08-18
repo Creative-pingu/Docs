@@ -1,104 +1,137 @@
-# Phase 11 - Nutrition Tracking Enhancements
+# Phase 11 - Enhanced Tracking and UX Polish
 
 > **Status**: Ready for Implementation
 > **Owner**: Dev Chat
 > **Architect**: Architect Chat
 > **Depends on**: Phase 10 completion
-> **ETC**: 6-8 hours
-> **Features**: F3, F4, F5, F6, F13, F14, F22
+> **ETC**: 8-12 hours
+> **Structure**: Three sub-parts (11a, 11b, 11c)
+> **Priority**: Water/Alcohol > Goal Tracking > Bug Fixes
 
 ---
 
-## Problem Statement
-Current nutrition tracking lacks visual feedback on goal progress and does not support water or alcohol tracking. Users need clearer indicators of healthy vs unhealthy nutrient intake.
+## Overview
+This phase combines new tracking features with critical bug fixes and UX improvements based on Phase 10 feedback.
 
-## Requirements
+---
 
-### Core Features
-- [ ] Colour coding when exceeding recommended daily intake
-- [ ] Info button explaining why exceeding limits is harmful
-- [ ] Nutrition options: Recommended (WHO base levels)
-- [ ] Nutrition options: Optimal (personalized by activity level)
-- [ ] Track water consumption
-- [ ] Traffic light system for healthy/not healthy nutrients
-- [ ] Alcohol tracking with adjustable percentages
+## Part 11a: Water and Alcohol Tracking (HIGHEST PRIORITY)
+
+### Problem Statement
+Users need to track water consumption and alcohol intake as part of their nutritional goals. Alcohol contributes to calorie intake and should be trackable with adjustable ABV percentages.
+
+### Requirements
+- Add water tracking functionality
+- Add alcohol tracking with drink categories
+- Configurable ABV percentage per drink category (default: beer 5%, wine 12%, spirits 40%)
+- Alcohol contributes to calorie calculations
+- Water/alcohol data visible in daily log
+- Water/alcohol included in export data
+
+### User Flow
+1. User taps Log Food
+2. User selects Water or Alcohol category
+3. For Water: Enter amount (ml, glasses, etc.), select meal type, log entry
+4. For Alcohol: Select drink category, enter volume, ABV percentage (pre-filled with category default, editable), calculate calories, select meal type, log entry
+
+### Data Structure
+Water: { amount, unit, timestamp, meal }
+Alcohol: { category, volume, abv, calories, timestamp, meal }
+Calories formula: volume * abv% * 7.89 kcal/g alcohol
+
+### Acceptance Criteria
+- User can log water consumption
+- User can log alcohol with drink categories
+- ABV defaults are correct (beer 5%, wine 12%, spirits 40%)
+- ABV is editable per entry
+- Alcohol calories calculated correctly
+- Water/alcohol appears in daily log
+- Water/alcohol data exported in ZIP
+
+---
+
+## Part 11b: Goal Tracking Enhancements
+
+### Problem Statement
+Users need better visual feedback on their nutritional intake and more flexible goal options.
+
+### Requirements
+- Traffic light system for nutrient display (green/yellow/red)
+- Colour coding when exceeding recommended daily intake
+- Info button explaining why exceeding limits is harmful
+- Nutrition options: Recommended (WHO base levels)
+- Nutrition options: Optimal (personalized by activity level)
 
 ### Traffic Light System
-Implement a 3-tier visual system for nutrient intake:
+Green (< 100% of target), Yellow (100-120%), Red (> 120%)
+Applies to: Calories, Protein, Carbs, Fat, Fibre, and all micronutrients
 
-| Tier | Color | Meaning | Action |
-|------|-------|---------|--------|
-| Green | #10B981 | Below recommended | Encourage more |
-| Yellow | #F59E0B | Within recommended range | On track |
-| Red | #EF4444 | Above recommended | Warning |
+### Acceptance Criteria
+- Traffic light colors applied to all nutrient displays
+- Color thresholds configurable
+- Info tooltips explain each nutrient
+- WHO recommended levels available as preset
+- Personalized optimal levels can be set
 
-**Application**:
-- Apply to all nutrient displays (macros, micros, calories)
-- Color applies to both numbers and progress bars
-- Hover/tooltip shows recommended range
+---
 
-### Water Tracking
-- [ ] Add water consumption logging
-- [ ] Track daily water intake
-- [ ] Set water goal (configurable, default 2L)
-- [ ] Display water progress separately from food
-- [ ] Include water in daily summary
+## Part 11c: Bug Fixes and UX Polish
 
-### Alcohol Tracking
-- [ ] Add alcohol as a category
-- [ ] Track alcohol consumption by drink type
-- [ ] Adjustable percentage per drink type (beer default 5%, wine 12%, spirits 40%)
-- [ ] Calculate alcohol calories (7 kcal/g pure alcohol)
-- [ ] Display alcohol units and calories
-- [ ] Contribute to daily calorie total
+### Requirements
+- B1: After selecting a food, options should reset
+- B2: Page zoom/centering issues fixed
+- B3: Back button behavior - ingredients list to recipe screen
+- B4: Scroll to bottom goes to last entry, not blank screen
+- B5: Multi-select with checkboxes per item
+- B6: Bigger date change button (min 44x44px)
+- B7: Remove source field from recipe tab
 
-### Nutrition Options
-- [ ] Toggle between Recommended and Optimal views
-- [ ] Recommended: WHO base levels for general population
-- [ ] Optimal: Personalized based on user profile (age, sex, weight, activity)
-- [ ] Show both side-by-side or as comparison
+### Bug Fix Details
+B1: Clear search field after food selection, clear quantity field after logging
+B2: Investigate viewport meta tag, check CSS overflow properties, test on iPhone 16e Safari
+B3: Back should return to ingredients list, maintain navigation stack properly
+B4: Calculate exact position of last entry, use scrollIntoView with proper alignment
+B5: Replace toggle mode with per-item checkboxes, selected foods highlighted, bulk actions available
+B6: Increase tap target size, add padding, position for thumb reachability
+B7: Remove source field from recipe editing UI, keep in data structure for compatibility
 
-### Info Tooltips
-- [ ] Info button (i) next to each nutrient
-- [ ] Explains:
-  - What the nutrient is
-  - Why it matters
-  - Why exceeding limits is harmful
-  - Recommended daily intake
-- [ ] Contextual based on nutrient type
+### Acceptance Criteria
+- Food selection clears search/quantity fields
+- Page displays correctly without zoom issues
+- Back button navigates to ingredients list
+- Scroll to bottom positions correctly
+- Multi-select uses checkboxes per item
+- Date button is easy to press
+- Source field removed from recipe tab
 
-## Acceptance Criteria
-- [ ] Traffic light colors apply correctly to all nutrients
-- [ ] Info tooltips display on tap/click
-- [ ] Water consumption can be logged and tracked
-- [ ] Alcohol consumption can be logged with adjustable percentages
-- [ ] Nutrition options toggle between Recommended and Optimal
-- [ ] All changes persist across app restarts
-- [ ] Visual feedback is clear and intuitive
+---
 
 ## Technical Notes
 - No new runtime dependencies
-- Storage: localStorage (existing profile and logs)
-- Color scheme: Use existing Tailwind colors (green-500, amber-500, red-500)
-- Alcohol calculations: 7 kcal per gram of pure alcohol
-- Water goal: Configurable in Settings, default 2000ml
-- Tooltips: Use existing tooltip component or native title attribute
+- Water/Alcohol: New data types in localStorage
+- Traffic Light: CSS color classes, configurable thresholds
+- Bug Fixes: Various UI/UX improvements
 
 ## Validation Matrix
 | Test | Action | Expected Result |
 |------|--------|-----------------|
-| V1 | Exceed calorie limit | Display turns red |
-| V2 | Within protein range | Display turns yellow/green |
-| V3 | Below fibre target | Display turns green |
-| V4 | Tap info button | Tooltip with explanation appears |
-| V5 | Log water consumption | Water progress updates |
-| V6 | Log alcohol (beer) | Alcohol calories added to total |
-| V7 | Change alcohol percentage | New percentage saved and applied |
-| V8 | Toggle nutrition view | Switches between Recommended and Optimal |
-| V9 | Check all nutrients | All have traffic light colors |
-| V10 | Device validation | All tests pass on iPhone 16e |
+| V1 | Log water consumption | Water entry appears in daily log |
+| V2 | Log alcohol with default ABV | Alcohol entry with correct calories |
+| V3 | Edit ABV percentage | Custom ABV saved and used |
+| V4 | Exceed calorie target | Nutrient display shows red |
+| V5 | Near protein target | Nutrient display shows yellow |
+| V6 | Under carb target | Nutrient display shows green |
+| V7 | Tap info button | Tooltip with explanation appears |
+| V8 | Select food, then log | Search/quantity fields reset |
+| V9 | Navigate app | No zoom/centering issues |
+| V10 | Add ingredient to recipe | Back returns to ingredients list |
+| V11 | Scroll to bottom | Last entry visible, not blank screen |
+| V12 | Multi-select mode | Checkboxes visible per item |
+| V13 | Change date | Easy to tap, no mis-taps |
+| V14 | Edit recipe | Source field not visible |
+| V15 | Device validation | All tests pass on iPhone 16e |
 
 ## References
-- [FEATURES_AND_IMPROVEMENTS.md](../FEATURES_AND_IMPROVEMENTS.md) (F3, F4, F5, F6, F13, F14, F22)
+- [FEATURES_AND_IMPROVEMENTS.md](../FEATURES_AND_IMPROVEMENTS.md) (F3-F16, B1-B7)
 - [USER_GUIDE.md](../USER_GUIDE.md)
 - [Phase 10](../phase-10/README.md) (Preceding phase)
