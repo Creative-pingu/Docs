@@ -1,6 +1,6 @@
 # NutriTrack - Development Process
 
-> **Last Updated**: 2026-08-18
+> **Last Updated**: 2026-08-20
 > **Owner**: Architect Chat
 > **Status**: Updated with test/production page requirement
 
@@ -143,7 +143,109 @@ After Developer has finished implementation:
 
 ---
 
+## Lessons Learned from Test Environment Creation
+
+> **Source**: Phase 11 Review - App Reviewer Skill, 2026-08-20
+
+The NutriTrack-test environment creation (2026-08-18 to 2026-08-20) revealed critical gaps in our deployment and build processes. What should have been a simple repository copy required 6 commits and exposed 4 distinct failure classes.
+
+### Key Lessons
+
+1. **Path Configuration is Not Optional**
+   - Hardcoded paths in multiple files caused cascading failures
+   - Service Worker scope MUST match deployment path exactly
+   - Fetch calls MUST be within SW scope or use relative paths
+
+2. **Version Bumping Must Be Atomic**
+   - SHELL_APP_VERSION (index.html) and CACHE_VERSION (sw.js) must change together
+   - A mismatch causes old Service Worker to serve stale cached assets
+
+3. **Source and Compiled Must Stay in Sync**
+   - Manual compilation leads to divergence
+   - This caused runtime errors and inconsistent behavior
+
+4. **Test on Actual Deployment, Not Just Local**
+   - Path issues invisible when testing locally
+   - Only manifest when deployed to GitHub Pages
+
+5. **Service Worker Caching Can Mask Issues**
+   - Stale SW can serve old cached assets
+   - Debugging requires unregistering old SW and hard refreshing
+
+### Prevention Strategies
+
+- [x] Documented deployment path for each repository
+- [x] Created Test Environment Fix Report with debugging checklist
+- [ ] TODO: Automate path configuration (R22)
+- [ ] TODO: Automate build process (R23)
+
+---
+
+## Deployment Checklist
+
+> **Purpose**: Prevent R22 (deployment path configuration) failures
+> **Use**: Before deploying to ANY environment
+
+### Pre-Deployment
+- [ ] All fetch paths use relative paths OR correct deployment prefix
+- [ ] SW registration path matches deployment path
+- [ ] SW scope matches deployment path
+- [ ] All precached assets use correct paths
+- [ ] index.html manifest/icon paths use correct prefix
+- [ ] SHELL_APP_VERSION matches CACHE_VERSION
+- [ ] Build-info comment matches versions
+
+### Environment-Specific
+**Production**:
+- [ ] Paths prefixed with /NutriTrack/ or relative
+- [ ] SW at /NutriTrack/sw.js, scope /NutriTrack/
+- [ ] CACHE_VERSION = nutritrack-vXX
+
+**Test**:
+- [ ] Paths prefixed with /NutriTrack-test/ or relative
+- [ ] SW at /NutriTrack-test/sw.js, scope /NutriTrack-test/
+- [ ] CACHE_VERSION = nutritrack-vXX-test
+
+### Post-Deployment
+- [ ] Verify SW registered with correct scope in DevTools
+- [ ] Hard refresh to ensure fresh load
+- [ ] Test food database loads
+- [ ] Test critical user flows
+
+---
+
+## Build Automation Requirements
+
+> **Purpose**: Prevent R23 (manual build process) failures
+> **Use**: Before committing NutriTrack.jsx changes
+
+### Requirements
+1. Automated Compilation - NutriTrack.jsx to NutriTrack.js must be automatic
+2. Consistency Verification - Pre-commit hook verifies source/compiled match
+3. Validation - Compiled JS passes Babel parse and Node syntax checks
+
+### Minimum Viable Solution
+```javascript
+// build.js
+const babel = require("@babel/core");
+const fs = require("fs");
+const result = babel.transformFileSync("NutriTrack.jsx", {
+  presets: ["@babel/preset-react", "@babel/preset-env"]
+});
+fs.writeFileSync("NutriTrack.js", result.code);
+```
+
+```bash
+# .git/hooks/pre-commit
+if git diff --cached --name-only | grep -q "NutriTrack.jsx"; then
+  node build.js || exit 1
+fi
+```
+
+---
+
 ## References
 - [Project Charter](../PROJECT_CHARTER.md)
 - [Risk Register](../RISK_REGISTER.md)
 - [Architect Handover](../../uploads/Architect_Handover_2026-08-18.md)
+- [Test Environment Fix Report](../../Test%20environment/README.md)
