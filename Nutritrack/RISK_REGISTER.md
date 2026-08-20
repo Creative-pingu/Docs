@@ -1,6 +1,6 @@
 # NutriTrack — Risk Register
 
-> **Last Updated**: 2026-08-17
+> **Last Updated**: 2026-08-20
 > **Owner**: Architect Chat
 > **Status**: Active
 
@@ -97,7 +97,53 @@ This document tracks all identified risks for the NutriTrack project.
 | ID | Risk | Category | Likelihood | Impact | Mitigation | Owner | Status |
 |----|------|----------|------------|--------|------------|-------|--------|
 | R13 | Build process dependency | Build | Low | Medium | Document build steps, consider GitHub Actions | Dev Chat | Monitor |
-| R14 | Source/artifact divergence | Maintenance | Low | Low | Keep NutriTrack.jsx as source of truth, regenerate JS on changes | Dev Chat | Monitor |
+| R14 | Source/artifact divergence | Maintenance | **High** | **Medium** | Keep NutriTrack.jsx as source of truth, regenerate JS on changes. **CRITICAL**: Multiple Phase 11 incidents show this is a recurring high-risk issue requiring automation | Dev Chat | **MONITOR - 2026-08-20** |
+
+---
+
+## Critical Infrastructure Risks Identified from Phase 11 Review
+
+> **REVIEWER NOTE - App Reviewer Skill, 2026-08-20**: The following risks were identified during the Phase 11 implementation review and test environment creation. These are **CRITICAL** and **HIGH** severity risks that **MUST** be addressed before Phase 12 begins.
+>
+> **BLOCKING**: Phase 12 cannot start until R22 and R23 are mitigated.
+
+### R22: Deployment Path Configuration Risk
+
+**SEVERITY: CRITICAL** | **STATUS: OPEN - UNMANAGED**
+
+Hardcoded deployment paths in multiple files cause Service Worker scope mismatches and fetch failures.
+
+- **Category**: Deployment
+- **Likelihood**: High
+- **Impact**: High
+- **Description**: Hardcoded paths in NutriTrack.jsx, NutriTrack.js, sw.js, and index.html caused the test environment to require 4 separate fix commits before working. This pattern will repeat for any new environment.
+- **Evidence**: Commits c17724e, a235744, 4bb5961, 1d95e89 in NutriTrack-test repo (2026-08-20)
+- **Root Cause**: No centralized path configuration; SW scope must match deployment path exactly; fetch calls must be within SW scope
+- **Impact if Unresolved**: Every new environment deployment will fail; high risk of production failure; data loss risk from cache clearing
+- **Mitigation**: Extract all paths to configuration; use relative paths; add automated consistency tests
+- **Owner**: Dev Chat
+- **Target**: 2026-08-27
+- **Related**: R13, R14
+- **Reviewer Comment**: #1 priority from Phase 11 review. Test environment failures were entirely preventable.
+
+### R23: Manual Build Process Risk
+
+**SEVERITY: HIGH** | **STATUS: OPEN - UNMANAGED**
+
+Manual JSX to JS compilation leads to source/compiled divergence.
+
+- **Category**: Build
+- **Likelihood**: High
+- **Impact**: Medium
+- **Description**: NutriTrack.jsx (source) and NutriTrack.js (compiled) repeatedly diverge because compilation is manual, causing runtime errors and inconsistent behavior.
+- **Evidence**: Multiple commits in NutriTrack repo fixing path/version mismatches between files
+- **Root Cause**: No automated build pipeline; manual Babel compilation is error-prone
+- **Impact if Unresolved**: Runtime errors; debugging difficulty; wasted developer time
+- **Mitigation**: Automate Babel compilation; add pre-commit hooks; verify consistency
+- **Owner**: Dev Chat
+- **Target**: 2026-09-03
+- **Related**: R14
+- **Reviewer Comment**: #2 priority from Phase 11 review. Automation is essential to prevent this error class.
 
 ---
 
@@ -106,3 +152,4 @@ This document tracks all identified risks for the NutriTrack project.
 - [Project Charter](./PROJECT_CHARTER.md)
 - [Features and Improvements](./FEATURES_AND_IMPROVEMENTS.md)
 - [Architecture Documentation](./ARCHITECTURE.md)
+- [Test Environment Fix Report](../../Test%20environment/README.md)
