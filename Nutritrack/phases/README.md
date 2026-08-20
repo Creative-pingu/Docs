@@ -13,7 +13,8 @@ This folder contains briefs and documentation for each phase of NutriTrack devel
 | **8** | Complete | Platform Reliability | High |
 | **9** | Complete | Custom Food Promotion and Deployment | Medium |
 | **10** | Complete | Recipe Management | High |
-| **11** | Ready | Enhanced Tracking and UX Polish | High |
+| **11** | Complete | Enhanced Tracking and UX Polish | High |
+| **11.5** | Ready | Infrastructure: Build & Deployment Automation | **CRITICAL** |
 | **12** | Queued | Quantity and Settings UX | Medium |
 | **13** | Queued | Database Architecture | Medium |
 | **14** | Queued | Storage and Performance | Low |
@@ -59,13 +60,24 @@ This folder contains briefs and documentation for each phase of NutriTrack devel
 **Features**: Editable recipe templates, update ingredients/quantities
 
 ### Phase 11: Enhanced Tracking and UX Polish
-**Status**: Ready for Implementation
+**Status**: Complete
 **Brief**: [phase-11/README.md](./phase-11/README.md)
 **Structure**: Three sub-parts
 - **11a**: Water and Alcohol Tracking (HIGHEST PRIORITY)
 - **11b**: Goal Tracking Enhancements
 - **11c**: Bug Fixes and UX Polish
 **Features**: Water/alcohol tracking, traffic light system, bug fixes
+
+### Phase 11.5: Infrastructure - Build & Deployment Automation
+**Status**: Ready for Implementation
+**Brief**: [phase-11.5/README.md](./phase-11.5/README.md)
+**Priority**: CRITICAL (Blocks Phase 12)
+**ETC**: 2-4 days
+**Combines**: R22 mitigation + R23 mitigation
+**Features**: Automated build process, path configuration, deployment safety checks
+**Blocks**: Phase 12 cannot start until this is complete
+
+**Description**: Addresses critical infrastructure risks identified in Phase 11 review. Creates automated build pipeline and deployment configuration to prevent recurring path and compilation issues.
 
 ### Phase 12: Quantity and Settings UX
 **Status**: Queued
@@ -99,20 +111,24 @@ Phase 7a (CRITICAL) - COMPLETE
     
     Phase 10 (Recipe Management) - COMPLETE
     
-    Phase 11 (Enhanced Tracking + UX Polish) - READY
+    Phase 11 (Enhanced Tracking + UX Polish) - COMPLETE
     │   ├── 11a: Water and Alcohol Tracking
     │   ├── 11b: Goal Tracking Enhancements
     │   └── 11c: Bug Fixes and UX Polish
     │
-    └── Phase 12 (Quantity and Settings UX)
-        └── Phase 13 (Database Architecture)
-            └── Phase 14 (Storage and Performance)
-                └── Phase 15 (Testing and Future Features)
+    └── Phase 11.5 (Infrastructure) - READY
+        │   ├── R22: Deployment Path Configuration
+        │   └── R23: Automated Build Process
+        │
+        └── Phase 12 (Quantity and Settings UX)
+            └── Phase 13 (Database Architecture)
+                └── Phase 14 (Storage and Performance)
+                    └── Phase 15 (Testing and Future Features)
 ```
 
-**Note**: Phase 7a, 7b, 8, 9, and 10 are complete.
-Phase 11 is ready for implementation with three sub-parts.
-Phase 14 moved to end - will only address if storage issues arise.
+**Note**: Phase 7a, 7b, 8, 9, 10, and 11 are complete.
+Phase 11.5 is ready for implementation (CRITICAL - blocks Phase 12).
+Phase 12 is queued pending Phase 11.5 completion.
 
 ## References
 - [Project Charter](../PROJECT_CHARTER.md)
