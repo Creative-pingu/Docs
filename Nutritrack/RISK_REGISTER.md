@@ -1,6 +1,6 @@
 # NutriTrack — Risk Register
 
-> **Last Updated**: 2026-08-20
+> **Last Updated**: 2026-08-22
 > **Owner**: Architect Chat
 > **Status**: Active
 
@@ -53,103 +53,35 @@ This document tracks all identified risks for the NutriTrack project.
 | R11 | Hardcoded external API call (Anthropic) | Privacy/Security | High | High | Removed function, replaced with local-only parsing (Phase 7a) | Dev Chat | RESOLVED - 2026-08-16 |
 | R12 | eval() usage in code execution | Security | High | High | Pre-compiled JSX to JS, removed eval() (Phase 7b) | Dev Chat | RESOLVED - 2026-08-17 |
 
----
+### R22: Deployment Path Configuration Risk
 
-## Observations from Phase 7a, 7b, 8, and 9
+**SEVERITY: CRITICAL** | **STATUS: RESOLVED - 2026-08-22**
 
-### Phase 7a (Remove Anthropic API Call)
-- Implementation: Local-only recipe text splitter using markdown headings and colon detection
-- Approach: Splits on #/##/### or lines ending with colon, collects following lines as ingredients
-- Parsing: Uses existing parseIngredients/parseIngredientLine utilities
-- Servings: Extracts from (serves N) or (servings N) patterns
-- Fallback: Treats entire paste as one recipe if no structure detected
-- Observation: Default servings is 4 if not specified
+Hardcoded deployment paths in multiple files have been centralized in deploy-config.js with automated validation.
 
-### Phase 7b (Remove eval() Usage)
-- Implementation: Pre-compiled NutriTrack.jsx to NutriTrack.js at build time
-- Build: Uses Babel with preset-react (classic runtime) + preset-env (modules:false)
-- Loading: Static script tag injection, no dynamic evaluation
-- Architecture: Both JSX (source) and JS (compiled) exist in repo
-- Observation: SHELL_APP_VERSION rename was necessary to avoid const collision between index.html and NutriTrack.js
+- **Resolution**: All path definitions moved to deploy-config.js; check-paths.js validates consistency; pre-commit hooks prevent divergence
+- **Implementation**: Validated hardcoded paths approach - source files contain paths that must match config values
+- **Owner**: Dev Chat
+- **Evidence**: Commits 9596232e (NutriTrack), 1a938389 (NutriTrack-test)
 
-### Phase 8 (Platform Reliability)
-- Implementation: Hybrid offline detection + centralized error handling
-- Offline Detection: navigator.onLine fast gate + Worker /health probe (1000ms timeout) + localStorage cached state
-- Error Handling: mapError()/friendlyError() translate technical messages to user-friendly strings
-- Error Logging: Local-only nt-error-logs (capped at 50 entries, never transmitted) with read-only viewer
-- 502/503 Handling: Treated as sync outage (not connectivity) - isOnline stays true, sync UI surfaces error
-- Versioning: CACHE_VERSION v61 -> v62, APP_VERSION v61 -> v62
-- Device Validation: All Phase 8 validation matrix tests passed on iPhone 16e (2026-08-17)
+### R23: Manual Build Process Risk
 
-### Phase 9 (Custom Food Promotion and Deployment)
-- Implementation: Custom food editing + JSON patch export + schema migration + SW update fallback
-- Custom Food Editing: openEditCustomFood() loads existing food, saveCustomFood updates in-place, Edit button on each food
-- Form Modes: Simple (6 standard package values) / Advanced (all 19 NUTRIENT_META fields), toggle with clear UX
-- Schema Migration: migrateCustomFoods() one-time backfill of all numeric nutrient keys to null for legacy records (idempotent)
-- JSON Patch Export: buildCustomFoodPatch() emits RFC 6902 add-ops envelope with schema_version 1, all 33 fields present
-- Schema Mapping: CUSTOM_FOOD_TO_DB covers all nutrient fields (macros, fibre/fat subtypes, amino acids, micronutrients)
-- Settings Integration: Custom Foods management card with active count + Manage button
-- SW Update Fallback: 4-second controllerchange timeout fallback ensures users never stranded on stale build
-- Versioning: CACHE_VERSION v65 -> v66 -> v67, APP_VERSION v65 -> v66 -> v67
-- Device Validation: All Phase 9 validation matrix tests passed on iPhone 16e (2026-08-17)
+**SEVERITY: HIGH** | **STATUS: RESOLVED - 2026-08-22**
+
+Manual JSX to JS compilation has been automated with pre-commit validation.
+
+- **Resolution**: build.js automates Babel compilation; pre-commit hook runs build + validation; source/compiled divergence now impossible
+- **Owner**: Dev Chat
+- **Evidence**: build.js, .husky/pre-commit, scripts/check-paths.js in both repos
 
 ### New Considerations
 | ID | Risk | Category | Likelihood | Impact | Mitigation | Owner | Status |
 |----|------|----------|------------|--------|------------|-------|--------|
 | R13 | Build process dependency | Build | Low | Medium | Document build steps, consider GitHub Actions | Dev Chat | Monitor |
-| R14 | Source/artifact divergence | Maintenance | **High** | **Medium** | Keep NutriTrack.jsx as source of truth, regenerate JS on changes. **CRITICAL**: Multiple Phase 11 incidents show this is a recurring high-risk issue requiring automation | Dev Chat | **MONITOR - 2026-08-20** |
+| R14 | Source/artifact divergence | Maintenance | High | Medium | Keep NutriTrack.jsx as source of truth, regenerate JS on changes. CRITICAL: Multiple Phase 11 incidents show this is a recurring high-risk issue requiring automation | Dev Chat | MONITOR - 2026-08-20 |
 
 ---
 
-## Critical Infrastructure Risks Identified from Phase 11 Review
+## Observations from Phase 7a, 7b, 8, and 9
 
-> **REVIEWER NOTE - App Reviewer Skill, 2026-08-20**: The following risks were identified during the Phase 11 implementation review and test environment creation. These are **CRITICAL** and **HIGH** severity risks that **MUST** be addressed before Phase 12 begins.
->
-> **BLOCKING**: Phase 12 cannot start until R22 and R23 are mitigated.
-
-### R22: Deployment Path Configuration Risk
-
-**SEVERITY: CRITICAL** | **STATUS: OPEN - UNMANAGED**
-
-Hardcoded deployment paths in multiple files cause Service Worker scope mismatches and fetch failures.
-
-- **Category**: Deployment
-- **Likelihood**: High
-- **Impact**: High
-- **Description**: Hardcoded paths in NutriTrack.jsx, NutriTrack.js, sw.js, and index.html caused the test environment to require 4 separate fix commits before working. This pattern will repeat for any new environment.
-- **Evidence**: Commits c17724e, a235744, 4bb5961, 1d95e89 in NutriTrack-test repo (2026-08-20)
-- **Root Cause**: No centralized path configuration; SW scope must match deployment path exactly; fetch calls must be within SW scope
-- **Impact if Unresolved**: Every new environment deployment will fail; high risk of production failure; data loss risk from cache clearing
-- **Mitigation**: Extract all paths to configuration; use relative paths; add automated consistency tests
-- **Owner**: Dev Chat
-- **Target**: 2026-08-27
-- **Related**: R13, R14
-- **Reviewer Comment**: #1 priority from Phase 11 review. Test environment failures were entirely preventable.
-
-### R23: Manual Build Process Risk
-
-**SEVERITY: HIGH** | **STATUS: OPEN - UNMANAGED**
-
-Manual JSX to JS compilation leads to source/compiled divergence.
-
-- **Category**: Build
-- **Likelihood**: High
-- **Impact**: Medium
-- **Description**: NutriTrack.jsx (source) and NutriTrack.js (compiled) repeatedly diverge because compilation is manual, causing runtime errors and inconsistent behavior.
-- **Evidence**: Multiple commits in NutriTrack repo fixing path/version mismatches between files
-- **Root Cause**: No automated build pipeline; manual Babel compilation is error-prone
-- **Impact if Unresolved**: Runtime errors; debugging difficulty; wasted developer time
-- **Mitigation**: Automate Babel compilation; add pre-commit hooks; verify consistency
-- **Owner**: Dev Chat
-- **Target**: 2026-09-03
-- **Related**: R14
-- **Reviewer Comment**: #2 priority from Phase 11 review. Automation is essential to prevent this error class.
-
----
-
-## References
-
-- [Project Charter](./PROJECT_CHARTER.md)
-- [Features and Improvements](./FEATURES_AND_IMPROVEMENTS.md)
-- [Architecture Documentation](./ARCHITECTURE.md)
-- [Test Environment Fix Report](../../Test%20environment/README.md)
+### Phase 7a (Remove Anthropic API Call)
