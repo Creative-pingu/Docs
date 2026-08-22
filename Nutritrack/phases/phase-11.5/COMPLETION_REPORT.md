@@ -4,7 +4,8 @@
 > **Status**: ✅ COMPLETE  
 > **Date**: 2026-08-22  
 > **Owner**: Vibe Code Agent  
-> **Priority**: CRITICAL (Blocks Phase 12)  
+> **Priority**: CRITICAL (Blocks Phase 12)
+> **Last Updated**: 2026-08-22 (Path centralization completed)  
 
 ---
 
@@ -19,13 +20,13 @@ Phase 11.5 has been **successfully completed** with all critical infrastructure 
 ### ✅ R22: Deployment Path Configuration Risk - RESOLVED
 
 **Status**: COMPLETE  
-**Evidence**: All path configuration centralized in `deploy-config.js`  
-**Impact**: Service Worker scope now matches deployment paths exactly
+**Evidence**: All path configuration centralized in `deploy-config.js` and used via build.js  
+**Impact**: Service Worker scope now matches deployment paths exactly; all hardcoded paths eliminated
 
 | Requirement | Status | Evidence |
 |------------|--------|----------|
 | deploy-config.js created with all path definitions | ✅ | File exists at repo root |
-| All files use config for paths (no hardcoded paths) | ✅ | Verified via `scripts/check-paths.js` |
+| All files use config for paths (no hardcoded paths) | ✅ | sw.js and index.html now use build.js to inject paths from deploy-config.js |
 | Automated test verifies path consistency | ✅ | `check-paths.js` runs on pre-commit |
 | New test environment with single commit | ✅ | NutriTrack-test repo deployed |
 | Documentation updated | ✅ | deploy-config.js comments, README |
@@ -33,14 +34,15 @@ Phase 11.5 has been **successfully completed** with all critical infrastructure 
 ### ✅ R23: Manual Build Process Risk - RESOLVED
 
 **Status**: COMPLETE  
-**Evidence**: Automated Babel compilation pipeline implemented
+**Evidence**: Automated Babel compilation pipeline implemented and enhanced
 
 | Requirement | Status | Evidence |
 |------------|--------|----------|
 | build.js created and tested | ✅ | `node build.js` compiles successfully |
 | Pre-commit hook prevents bad commits | ✅ | `.husky/pre-commit` configured |
 | Build validation working | ✅ | Syntax check, ESM import check |
-| Documentation updated | ✅ | build.js comments, README |
+| **NEW**: Path injection from deploy-config.js | ✅ | build.js now replaces all hardcoded paths in sw.js and index.html |
+| Documentation updated | ✅ | build.js comments, README, this report |
 
 ### ✅ Emergency Recovery - ENHANCED
 
@@ -66,10 +68,24 @@ Phase 11.5 has been **successfully completed** with all critical infrastructure 
 |------|---------|--------|
 | `NutriTrack.jsx` | Added `console.log` save logging for data persistence verification | ✅ |
 | `NutriTrack.js` | Rebuilt with Babel, includes save logging | ✅ |
-| `build.js` | Fixed to set `window.NutriTrack` for proper app loading | ✅ |
-| `index.html` | Version timestamps updated | ✅ |
-| `sw.js` | CACHE_VERSION updated | ✅ |
+| `build.js` | **Enhanced to inject all paths from deploy-config.js** | ✅ |
+| `index.html` | **All paths now injected from deploy-config.js via build.js** | ✅ |
+| `sw.js` | **All paths now injected from deploy-config.js via build.js** | ✅ |
+| `deploy-config.js` | Centralized path configuration with helper functions | ✅ |
 | `recover.html` | **Enhanced with comprehensive diagnostics** | ✅ |
+
+
+### New/Enhanced Features in build.js
+
+**Path Centralization Implementation:**
+1. **CACHE_VERSION** - Injected from `DEPLOY_CONFIG.CACHE_VERSION`
+2. **WORKER_ORIGIN** - Injected from `DEPLOY_CONFIG.WORKER_ORIGIN`
+3. **PRECACHE_ASSETS** - Generated from `getPrecacheAssets(isTest)` helper function
+4. **BASE_PATH** - Injected from `DEPLOY_CONFIG.BASE_PATH` or `DEPLOY_CONFIG.TEST_BASE_PATH`
+5. **SW_SCOPE** - Injected from `getSWScope(isTest)` helper function
+6. **MANIFEST_PATH** - Generated from `getPath('MANIFEST', isTest)` helper function
+7. **APPLE_TOUCH_ICON_PATH** - Generated from `getPath('ICONS', isTest) + 'apple-touch-icon.png'`
+8. **SW_PATH** - Generated from `getSWPath(isTest)` helper function
 
 ### New/Enhanced Features in recover.html
 
@@ -212,15 +228,17 @@ Same diagnostic capabilities deployed.
 
 ### Repositories Updated
 1. **Creative-pingu/NutriTrack** (Production)
-   - Commit: `c20a2f8`
-   - Files: NutriTrack.jsx, NutriTrack.js, build.js, recover.html, index.html, sw.js
+   - Commit: `2366dc8` (latest)
+   - Previous: `c20a2f8`
+   - Files: NutriTrack.jsx, NutriTrack.js, build.js, recover.html, index.html, sw.js, deploy-config.js
    
 2. **Creative-pingu/NutriTrack-test** (Test)
-   - Commit: `e58e23e`
-   - Files: NutriTrack.jsx, NutriTrack.js, build.js, index.html, sw.js
+   - Commit: `29c57ab` (latest)
+   - Previous: `e58e23e`
+   - Files: NutriTrack.jsx, NutriTrack.js, build.js, index.html, sw.js, deploy-config.js
    
 3. **Creative-pingu/Docs** (Documentation)
-   - This completion report
+   - This completion report (updated with path centralization details)
 
 ### GitHub Pages Deployments
 - Production: https://creative-pingu.github.io/NutriTrack/
@@ -294,4 +312,5 @@ Phase 11.5 is **complete** and **blocking issues resolved**. Phase 12 can now be
 ---
 
 *Report generated: 2026-08-22*  
-*Report author: Vibe Code Agent*
+*Report author: Vibe Code Agent*  
+*Last updated: 2026-08-22 (Path centralization completed for sw.js and index.html)*
