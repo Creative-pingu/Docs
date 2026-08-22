@@ -5,7 +5,7 @@
 > **Date**: 2026-08-22  
 > **Owner**: Vibe Code Agent  
 > **Priority**: CRITICAL (Blocks Phase 12)
-> **Last Updated**: 2026-08-22 (Path centralization completed)  
+> **Last Updated**: 2026-08-22 (Path centralization completed with placeholder tokens)  
 
 ---
 
@@ -20,13 +20,13 @@ Phase 11.5 has been **successfully completed** with all critical infrastructure 
 ### ✅ R22: Deployment Path Configuration Risk - RESOLVED
 
 **Status**: COMPLETE  
-**Evidence**: All path configuration centralized in `deploy-config.js` and used via build.js  
-**Impact**: Service Worker scope now matches deployment paths exactly; all hardcoded paths eliminated
+**Evidence**: Source files use placeholder tokens (NUTRITRACK_*) replaced by build.js from deploy-config.js  
+**Impact**: Service Worker scope now matches deployment paths exactly; all hardcoded paths eliminated from source
 
 | Requirement | Status | Evidence |
 |------------|--------|----------|
 | deploy-config.js created with all path definitions | ✅ | File exists at repo root |
-| All files use config for paths (no hardcoded paths) | ✅ | sw.js and index.html now use build.js to inject paths from deploy-config.js |
+| All files use config for paths (no hardcoded paths) | ✅ | Source files use placeholder tokens (NUTRITRACK_*) replaced by build.js from deploy-config.js |
 | Automated test verifies path consistency | ✅ | `check-paths.js` runs on pre-commit |
 | New test environment with single commit | ✅ | NutriTrack-test repo deployed |
 | Documentation updated | ✅ | deploy-config.js comments, README |
@@ -68,24 +68,29 @@ Phase 11.5 has been **successfully completed** with all critical infrastructure 
 |------|---------|--------|
 | `NutriTrack.jsx` | Added `console.log` save logging for data persistence verification | ✅ |
 | `NutriTrack.js` | Rebuilt with Babel, includes save logging | ✅ |
-| `build.js` | **Enhanced to inject all paths from deploy-config.js** | ✅ |
-| `index.html` | **All paths now injected from deploy-config.js via build.js** | ✅ |
-| `sw.js` | **All paths now injected from deploy-config.js via build.js** | ✅ |
+| `build.js` | **Replaces placeholder tokens (NUTRITRACK_*) with values from deploy-config.js** | ✅ |
+| `index.html` | **Uses placeholder tokens replaced by build.js** | ✅ |
+| `sw.js` | **Uses placeholder tokens (NUTRITRACK_CACHE_VERSION, NUTRITRACK_BASE_PATH, etc.) replaced by build.js** | ✅ |
 | `deploy-config.js` | Centralized path configuration with helper functions | ✅ |
 | `recover.html` | **Enhanced with comprehensive diagnostics** | ✅ |
 
 
+
 ### New/Enhanced Features in build.js
 
-**Path Centralization Implementation:**
-1. **CACHE_VERSION** - Injected from `DEPLOY_CONFIG.CACHE_VERSION`
-2. **WORKER_ORIGIN** - Injected from `DEPLOY_CONFIG.WORKER_ORIGIN`
-3. **PRECACHE_ASSETS** - Generated from `getPrecacheAssets(isTest)` helper function
-4. **BASE_PATH** - Injected from `DEPLOY_CONFIG.BASE_PATH` or `DEPLOY_CONFIG.TEST_BASE_PATH`
-5. **SW_SCOPE** - Injected from `getSWScope(isTest)` helper function
-6. **MANIFEST_PATH** - Generated from `getPath('MANIFEST', isTest)` helper function
-7. **APPLE_TOUCH_ICON_PATH** - Generated from `getPath('ICONS', isTest) + 'apple-touch-icon.png'`
-8. **SW_PATH** - Generated from `getSWPath(isTest)` helper function
+**Placeholder Token Implementation:**
+The build process now replaces placeholder tokens in source files with actual values from deploy-config.js:
+
+1. **NUTRITRACK_CACHE_VERSION** - Replaced with `DEPLOY_CONFIG.CACHE_VERSION`
+2. **NUTRITRACK_WORKER_ORIGIN** - Replaced with `DEPLOY_CONFIG.WORKER_ORIGIN`
+3. **NUTRITRACK_BASE_PATH** - Replaced with `DEPLOY_CONFIG.BASE_PATH` (PROD) or `DEPLOY_CONFIG.TEST_BASE_PATH` (TEST)
+4. **NUTRITRACK_PRECACHE_ASSETS** - Replaced with array from `getPrecacheAssets(isTest)`
+5. **NUTRITRACK_MANIFEST_PATH** - Replaced with value from `getPath('MANIFEST', isTest)`
+6. **NUTRITRACK_APPLE_TOUCH_ICON_PATH** - Replaced with value from `getPath('ICONS', isTest) + 'apple-touch-icon.png'`
+7. **NUTRITRACK_SW_PATH** - Replaced with value from `getSWPath(isTest)`
+8. **NUTRITRACK_SW_SCOPE** - Replaced with value from `getSWScope(isTest)`
+
+**Source files contain placeholders, built files contain actual values.**
 
 ### New/Enhanced Features in recover.html
 
@@ -228,13 +233,13 @@ Same diagnostic capabilities deployed.
 
 ### Repositories Updated
 1. **Creative-pingu/NutriTrack** (Production)
-   - Commit: `2366dc8` (latest)
-   - Previous: `c20a2f8`
+   - Commit: `be66589` (latest)
+   - Previous: `2366dc8`
    - Files: NutriTrack.jsx, NutriTrack.js, build.js, recover.html, index.html, sw.js, deploy-config.js
    
 2. **Creative-pingu/NutriTrack-test** (Test)
-   - Commit: `29c57ab` (latest)
-   - Previous: `e58e23e`
+   - Commit: `114ff0a` (latest)
+   - Previous: `29c57ab`
    - Files: NutriTrack.jsx, NutriTrack.js, build.js, index.html, sw.js, deploy-config.js
    
 3. **Creative-pingu/Docs** (Documentation)
@@ -313,4 +318,4 @@ Phase 11.5 is **complete** and **blocking issues resolved**. Phase 12 can now be
 
 *Report generated: 2026-08-22*  
 *Report author: Vibe Code Agent*  
-*Last updated: 2026-08-22 (Path centralization completed for sw.js and index.html)*
+*Last updated: 2026-08-22 (Path centralization completed with placeholder tokens in source files)*
