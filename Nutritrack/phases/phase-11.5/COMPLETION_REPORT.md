@@ -246,6 +246,43 @@ Phase 11.5 is **complete** and **blocking issues resolved**. Phase 12 can now be
 
 ---
 
+## Known Issues and Limitations
+
+### iOS Safari localStorage Isolation
+
+**Status**: DOCUMENTED - Requires Architect Discussion  
+**Severity**: MEDIUM  
+**Platform**: iOS Safari only  
+
+**Issue**: On iOS, Safari isolates localStorage by browsing context. This means:
+- Data saved in a Safari tab is **NOT visible** to the Home Screen PWA
+- Data saved in the Home Screen PWA is **NOT visible** to Safari tabs
+- The recover.html page only sees data from its own browsing context
+
+**Evidence**: User testing confirmed that recover.html only finds recipes and logs from the same Safari session, not from the Home Screen version.
+
+**Root Cause**: iOS Safari treats each browsing context (tab, Home Screen PWA, different windows) as having separate localStorage databases. This is a platform-level restriction, not a bug in NutriTrack.
+
+**Impact**: Users who add the app to their Home Screen and use it there will have their data isolated from the Safari tab version. The recover.html page launched from one context cannot access data saved in another context.
+
+**Proposed Solution**: Migrate from localStorage to IndexedDB, which IS shared across all browsing contexts on iOS. This would require:
+1. Implement IndexedDB as primary storage
+2. Keep localStorage as fallback for compatibility
+3. Auto-migrate existing localStorage data to IndexedDB on first load
+4. Sync both storage mechanisms during transition period
+
+**Next Steps**: Discuss with Architect to determine:
+- Priority of this migration
+- Whether the current localStorage-only approach is acceptable given iOS limitations
+- Alternative approaches (e.g., user education, separate export from each context)
+
+**Workaround for Users**: 
+- Access recover.html from the **same context** where data was saved
+- For Home Screen data: Open the Home Screen app, then navigate to recover.html within that context
+- For Safari data: Open recover.html directly in Safari
+
+---
+
 ## References
 
 - [R22: Deployment Path Configuration Risk](../../RISK_REGISTER.md#r22-deployment-path-configuration-risk)
